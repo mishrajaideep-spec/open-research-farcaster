@@ -6,6 +6,7 @@ import { Noto_Serif, Lato } from "next/font/google";
 import { ResearchProvider } from "@/components/research-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AgentProvider } from "@/components/agent-context";
+import { FarcasterProvider } from "@/components/farcaster-context";
 
 const lato = Lato({
     subsets: ['latin'],
@@ -45,9 +46,11 @@ export default function RootLayout({
                 >
                     <AgentProvider>
                         <TooltipProvider>
-                            <ResearchProvider>
-                                {children}
-                            </ResearchProvider>
+                            <FarcasterProvider>
+                                <ResearchProvider>
+                                    {children}
+                                </ResearchProvider>
+                            </FarcasterProvider>
                         </TooltipProvider>
                     </AgentProvider>
                 </CopilotKit>
