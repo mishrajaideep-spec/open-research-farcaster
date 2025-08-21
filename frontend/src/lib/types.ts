@@ -48,5 +48,11 @@ export interface ResearchState {
     logs: Log[];
 }
 
+export interface FarcasterState {
+    messages: { [key: string]: unknown }[];
+    logs: Log[];
+    casts?: unknown[];
+}
+
 // export type Document = Pick<ResearchState, 'sections' | 'title' | 'intro' | 'outline' | 'conclusion' | 'cited_sources'>
 

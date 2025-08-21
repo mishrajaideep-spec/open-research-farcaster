@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { GripVertical } from "lucide-react";
 import { useCoAgentStateRender, useLangGraphInterrupt, useCopilotContext } from "@copilotkit/react-core";
 
-import { ResearchState } from "@/lib/types";
+import { ResearchState, FarcasterState } from "@/lib/types";
 import { Progress } from "@/components/progress";
 import SourcesModal from "@/components/resource-modal";
 import { useResearch } from "@/components/research-context";
+import { useFarcaster } from "@/components/farcaster-context";
 import { DocumentsView } from "@/components/documents-view";
 import { useStreamingContent } from '@/lib/hooks/useStreamingContent';
 import { ProposalViewer } from "@/components/structure-proposal-viewer";
@@ -22,19 +23,22 @@ export default function HomePage() {
     const dividerRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
     const { state: researchState, setResearchState } = useResearch()
+    const { state: farcasterState, setFarcasterState } = useFarcaster()
     const { agentType } = useAgent()
     const { setAgentSession } = useCopilotContext()
 
     // Handle all "logs" - The loading states that show what the agent is doing
-    useCoAgentStateRender<ResearchState>({
+    const activeState = agentType === 'farcaster' ? farcasterState : researchState
+    useCoAgentStateRender<ResearchState | FarcasterState>({
         name: agentType,
         render: ({ state }) => {
-            if (state.logs?.length > 0) {
-                return <Progress logs={state.logs} />;
+            const logs = (state as ResearchState | FarcasterState).logs;
+            if (logs?.length > 0) {
+                return <Progress logs={logs} />;
             }
             return null;
         },
-    }, [researchState, agentType]);
+    }, [activeState, agentType]);
 
     useEffect(() => {
         setAgentSession({ agentName: agentType })
@@ -105,7 +109,11 @@ export default function HomePage() {
                         <Chat
                             onSubmitMessage={async () => {
                                 // clear the logs before starting the new research
-                                setResearchState({ ...researchState, logs: [] });
+                                if (agentType === 'farcaster') {
+                                    setFarcasterState({ ...farcasterState, logs: [] });
+                                } else {
+                                    setResearchState({ ...researchState, logs: [] });
+                                }
                                 await new Promise((resolve) => setTimeout(resolve, 30));
                             }}
                         />

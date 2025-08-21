@@ -27,6 +27,7 @@ export default function Chat(props: CopilotChatProps) {
 
   return (
     <CopilotChat
+      key={agentType}
       instructions={instructions}
       labels={labels}
       className="h-full w-full font-noto"
