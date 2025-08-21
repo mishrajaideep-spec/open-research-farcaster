@@ -1,7 +1,8 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "agent": "./graph.py:graph"
+    "agent": "./graph.py:graph",
+    "farcaster": "./farcaster_graph.py:graph"
   },
   "env": ".env",
   "python_version": "3.12",
