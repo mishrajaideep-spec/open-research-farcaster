@@ -15,10 +15,16 @@ const runtime = new CopilotRuntime({
         langGraphPlatformEndpoint({
             deploymentUrl: deploymentUrl!,
             langsmithApiKey: process.env.LANGSMITH_API_KEY!,
-            agents: [{
-                name: 'agent',
-                description: 'Research assistant',
-            }],
+            agents: [
+                {
+                    name: 'agent',
+                    description: 'Research assistant',
+                },
+                {
+                    name: 'farcaster',
+                    description: 'Farcaster agent',
+                }
+            ],
         })
     ]
 });

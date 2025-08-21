@@ -5,6 +5,7 @@ import { CopilotKit } from "@copilotkit/react-core";
 import { Noto_Serif, Lato } from "next/font/google";
 import { ResearchProvider } from "@/components/research-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AgentProvider } from "@/components/agent-context";
 
 const lato = Lato({
     subsets: ['latin'],
@@ -42,11 +43,13 @@ export default function RootLayout({
                     showDevConsole={false}
                     agent="agent"
                 >
-                    <TooltipProvider>
-                        <ResearchProvider>
-                            {children}
-                        </ResearchProvider>
-                    </TooltipProvider>
+                    <AgentProvider>
+                        <TooltipProvider>
+                            <ResearchProvider>
+                                {children}
+                            </ResearchProvider>
+                        </TooltipProvider>
+                    </AgentProvider>
                 </CopilotKit>
             </body>
         </html>

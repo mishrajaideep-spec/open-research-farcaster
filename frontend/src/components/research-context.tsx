@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 import type { ResearchState } from '@/lib/types'
 import { useCoAgent } from "@copilotkit/react-core";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import { useAgent } from "@/components/agent-context";
 
 interface ResearchContextType {
     state: ResearchState;
@@ -17,8 +18,9 @@ const ResearchContext = createContext<ResearchContextType | undefined>(undefined
 
 export function ResearchProvider({ children }: { children: ReactNode }) {
     const [sourcesModalOpen, setSourcesModalOpen] = useState<boolean>(false)
+    const { agentType } = useAgent();
     const { state: coAgentState, setState: setCoAgentsState, run } = useCoAgent<ResearchState>({
-        name: 'agent',
+        name: agentType,
         initialState: {},
     });
     // @ts-expect-error -- force null

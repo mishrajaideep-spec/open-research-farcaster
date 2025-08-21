@@ -3,7 +3,7 @@
 import Chat from "@/components/chat";
 import { useEffect, useRef, useState } from "react";
 import { GripVertical } from "lucide-react";
-import { useCoAgentStateRender, useLangGraphInterrupt } from "@copilotkit/react-core";
+import { useCoAgentStateRender, useLangGraphInterrupt, useCopilotContext } from "@copilotkit/react-core";
 
 import { ResearchState } from "@/lib/types";
 import { Progress } from "@/components/progress";
@@ -12,6 +12,7 @@ import { useResearch } from "@/components/research-context";
 import { DocumentsView } from "@/components/documents-view";
 import { useStreamingContent } from '@/lib/hooks/useStreamingContent';
 import { ProposalViewer } from "@/components/structure-proposal-viewer";
+import { useAgent } from "@/components/agent-context";
 
 const CHAT_MIN_WIDTH = 30;
 const CHAT_MAX_WIDTH = 50;
@@ -21,17 +22,23 @@ export default function HomePage() {
     const dividerRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
     const { state: researchState, setResearchState } = useResearch()
+    const { agentType } = useAgent()
+    const { setAgentSession } = useCopilotContext()
 
     // Handle all "logs" - The loading states that show what the agent is doing
     useCoAgentStateRender<ResearchState>({
-        name: 'agent',
+        name: agentType,
         render: ({ state }) => {
             if (state.logs?.length > 0) {
                 return <Progress logs={state.logs} />;
             }
             return null;
         },
-    }, [researchState]);
+    }, [researchState, agentType]);
+
+    useEffect(() => {
+        setAgentSession({ agentName: agentType })
+    }, [agentType, setAgentSession])
 
     useLangGraphInterrupt({
         render: ({ resolve, event }) => {
