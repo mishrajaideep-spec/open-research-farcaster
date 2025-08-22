@@ -13,7 +13,7 @@ import {
 // @ts-expect-error -- ignore
 import { CopilotChatProps } from "@copilotkit/react-ui/dist/components/chat/Chat";
 import { AgentType, useAgent } from "@/components/agent-context";
-import { routeAgent } from "@/lib/router";
+import { routeAgent, setLastAgent } from "@/lib/router";
 import { useCallback } from "react";
 import { flushSync } from "react-dom";
 import {
@@ -39,7 +39,10 @@ export default function Chat({ onSubmitMessage, ...props }: CopilotChatProps) {
     async (message: string) => {
       const { agent, confidence } = routeAgent(message);
       if (agent && confidence >= 0.6) {
-        flushSync(() => setAgentType(agent));
+        flushSync(() => {
+          setAgentType(agent);
+          setLastAgent(agent);
+        });
       }
       if (onSubmitMessage) {
         await onSubmitMessage(message);

@@ -1,5 +1,11 @@
 import { AgentType } from "@/components/agent-context";
 
+let lastAgent: AgentType | null = null;
+
+export function setLastAgent(agent: AgentType | null) {
+  lastAgent = agent;
+}
+
 export interface RouteResult {
   agent: AgentType | null;
   confidence: number;
@@ -42,7 +48,7 @@ export function routeAgent(query: string): RouteResult {
     if (text.includes(k)) rScore++;
   }
   if (fScore === 0 && rScore === 0) {
-    return { agent: null, confidence: 0 };
+    return { agent: lastAgent, confidence: 0 };
   }
   if (fScore > rScore) {
     return { agent: "farcaster", confidence: fScore / (fScore + rScore) };
@@ -50,5 +56,5 @@ export function routeAgent(query: string): RouteResult {
   if (rScore > fScore) {
     return { agent: "agent", confidence: rScore / (fScore + rScore) };
   }
-  return { agent: null, confidence: 0.5 };
+  return { agent: lastAgent, confidence: 0.5 };
 }
