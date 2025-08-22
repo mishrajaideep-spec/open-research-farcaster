@@ -15,6 +15,7 @@ import { CopilotChatProps } from "@copilotkit/react-ui/dist/components/chat/Chat
 import { AgentType, useAgent } from "@/components/agent-context";
 import { routeAgent } from "@/lib/router";
 import { useCallback } from "react";
+import { flushSync } from "react-dom";
 import {
   Select,
   SelectContent,
@@ -38,7 +39,7 @@ export default function Chat({ onSubmitMessage, ...props }: CopilotChatProps) {
     async (message: string) => {
       const { agent, confidence } = routeAgent(message);
       if (agent && confidence >= 0.6) {
-        setAgentType(agent);
+        flushSync(() => setAgentType(agent));
       }
       if (onSubmitMessage) {
         await onSubmitMessage(message);
