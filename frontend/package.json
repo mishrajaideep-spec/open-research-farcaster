@@ -7,7 +7,8 @@
     "remote-lgc-dev": "DEPLOYMENT=remote next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@copilotkit/react-core": "1.5.20",
@@ -43,7 +44,11 @@
     "eslint-config-next": "15.0.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^1.2.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "jsdom": "^24.0.0"
   },
   "packageManager": "pnpm@10.2.1",
   "pnpm": {
