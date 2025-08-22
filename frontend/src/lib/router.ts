@@ -23,6 +23,12 @@ const FARCASTER_KEYWORDS = [
   "fc",
 ];
 
+const FARCASTER_PATTERNS = [
+  /\bfid[:\s]*\d+\b/, // "fid 123" or "fid:123"
+  /\bfarcaster\b/, // explicit farcaster mentions
+  /^\d+$/ // numeric id without prefix
+];
+
 const RESEARCH_KEYWORDS = [
   "research",
   "report",
@@ -38,10 +44,13 @@ const RESEARCH_KEYWORDS = [
 ];
 
 export function routeAgent(query: string): RouteResult {
-  const text = query.toLowerCase();
+  const text = query.toLowerCase().trim();
   let fScore = 0;
   for (const k of FARCASTER_KEYWORDS) {
     if (text.includes(k)) fScore++;
+  }
+  for (const r of FARCASTER_PATTERNS) {
+    if (r.test(text)) fScore++;
   }
   let rScore = 0;
   for (const k of RESEARCH_KEYWORDS) {
